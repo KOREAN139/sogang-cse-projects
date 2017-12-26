@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <style type="text/css">
+        .hover {
+            position: absolute;
+            display: none;
+            font-size: x-small;
+            font-family: "Apple SD Gothic Neo";
+            background: white;
+            border: 1px solid crimson;
+        }
+
+        .wrapper {
+            width: 100%;
+            position: relative;
+        }
+
+        .wrapper:after {
+            content: "";
+            display: block;
+            padding-bottom: 100%;
+
+        }
+
+        .pixelstat {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+    </style>
+    <script>
+        var sTitle = "";
+        var currX, currY, cnt = 0;
+        var array = new Array (10000);
+        var x1, x2, y1, y2;
+        var price = 100000;
+
+        $(document).mousemove(function(e){
+            $("#titles").css({left: e.pageX+8, top: e.pageY});
+            currX = e.pageX, currY = e.pageY;
+        });
+        function e(o){
+            sTitle = o.id;
+            document.getElementById('titles').innerHTML=sTitle;
+            document.getElementById('titles').style.display='block';
+        }
+        function d(){
+            sTitle = "";
+            document.getElementById('titles').innerText=sTitle;
+            document.getElementById('titles').style.display='none';
+        }
+        function appendNode(v, id) {
+            n = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+            for (var p in v)
+                n.setAttributeNS(null, p, v[p]);
+            n.setAttributeNS(null, 'id', id);
+            n.setAttributeNS(null, 'onmouseover', 'e(this)');
+            document.getElementById('pxstat').appendChild(n);
+        }
+        function draw(){
+            /*
+            {% for px in pixel %}
+
+            {% endfor %}
+            */
+            appendNode({x: '10%', y: '10%', width: '10%', height: '10%', fill: 'yellow'}, 'testing');
+        }
+    </script>
+</head>
+<body>
+<div class="wrapper" onmouseout="d()">
+    <svg class="pixelstat" id="pxstat" stroke="black" onload="draw()">
+        <rect onmouseover="e(this)" onclick="purchase()" width="100%" height="100%" fill="white" id="NOT PURCHASED YET!" class="BLNK"/>
+        <!--
+        <rect onmouseover="e(this)" x="28%" width="40%" height="100%" fill="yellow" id="BYE!"/>
+        -->
+    </svg>
+</div>
+<div class="hover" id="titles"></div>
+</body>
+</html>
