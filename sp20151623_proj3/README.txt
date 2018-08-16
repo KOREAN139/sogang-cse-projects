@@ -46,10 +46,10 @@ Example:  sicsim>hi
 	  file with 'filename1''s content.
 	* CAUTION *
 	* 'copy' command classify two filenames by 'INDENT' not 'comma'
-    d[ir] 
+        d[ir] 
 	- shows items in current directory. Directory will be followed by '/', 
 	  and executable file will be followed by '*'
-    du[mp] [start, end] 
+        du[mp] [start, end] 
 	- display memory. It allows set display range that you want to show
 	  If you don't pass any parameters, simulator will only show 160 memory cells
 	echo [message]
@@ -83,7 +83,7 @@ Example:  sicsim>hi
 	- reset all memory cell as 0
 	run
 	- run program with given PROGADDR (or previously stopped address).
-      If any break point exists, sicsim will stop execting program at break point.
+          If any break point exists, sicsim will stop execting program at break point.
 	  else, execute to end of program.
 	  after this, sicsim will display register values on screen.
 	symbol
@@ -108,5 +108,5 @@ Files Includes With This Project
 Developer of This Program
 -------------------------
 
-	Sang goo Han, Undergraduate Computer Science and Engineering at Sogang Univ.
+	Sang gu Han, Undergraduate Computer Science and Engineering at Sogang Univ.
 	20151623
