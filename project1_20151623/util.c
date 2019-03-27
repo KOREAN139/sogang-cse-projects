@@ -9,6 +9,13 @@
 #include "globals.h"
 #include "util.h"
 
+static char const *TokenName[] = {
+  "EOF", "ERROR", "IF", "ELSE", "INT", "RETURN", "VOID",
+  "WHILE", "ID", "NUM", "=", "==", "!=", "<", "<=", ">",
+  ">=", "+", "-", "*", "/", "(", ")", "[", "]", "{", "}",
+  ",", ";"
+};
+
 /* Procedure printToken prints a token 
  * and its lexeme to the listing file
  */
@@ -20,44 +27,41 @@ void printToken( TokenType token, const char* tokenString )
     case RETURN:
     case VOID:
     case WHILE:
-      fprintf(listing,
-         "reserved word: %s\n",tokenString);
-      break;
-    case ASSIGN: fprintf(listing,"=\n"); break;
-    case EQ: fprintf(listing,"==\n"); break;
-    case NEQ: fprintf(listing,"!=\n"); break;
-    case LT: fprintf(listing,"<\n"); break;
-    case LTE: fprintf(listing,"<=\n"); break;
-    case GT: fprintf(listing,">\n"); break;
-    case GTE: fprintf(listing,">=\n"); break;
-    case LPAREN: fprintf(listing,"(\n"); break;
-    case RPAREN: fprintf(listing,")\n"); break;
-    case LBRAC: fprintf(listing,"[\n"); break;
-    case RBRAC: fprintf(listing,"]\n"); break;
-    case LCURLY: fprintf(listing,"{\n"); break;
-    case RCURLY: fprintf(listing,"}\n"); break;
-    case COMMA: fprintf(listing,",\n"); break;
-    case SEMI: fprintf(listing,";\n"); break;
-    case PLUS: fprintf(listing,"+\n"); break;
-    case MINUS: fprintf(listing,"-\n"); break;
-    case TIMES: fprintf(listing,"*\n"); break;
-    case OVER: fprintf(listing,"/\n"); break;
-    case ENDFILE: fprintf(listing,"EOF\n"); break;
+    case ASSIGN:
+    case EQ:
+    case NEQ:
+    case LT:
+    case LTE:
+    case GT:
+    case GTE:
+    case LPAREN:
+    case RPAREN:
+    case LBRAC:
+    case RBRAC:
+    case LCURLY:
+    case RCURLY:
+    case COMMA:
+    case SEMI:
+    case PLUS:
+    case MINUS:
+    case TIMES:
+    case OVER:
+    case ENDFILE:
     case NUM:
-      fprintf(listing,
-          "NUM, val= %s\n",tokenString);
-      break;
     case ID:
-      fprintf(listing,
-          "ID, name= %s\n",tokenString);
-      break;
     case ERROR:
-      fprintf(listing,
-          "ERROR: %s\n",tokenString);
-      break;
+            printTokenTableRow(token, tokenString); break;
     default: /* should never happen */
       fprintf(listing,"Unknown token: %d\n",token);
   }
+}
+
+/* Function printTokenTableRow prints row for
+ * token table
+ */
+void printTokenTableRow(TokenType token, const char* tokenString)
+{
+        fprintf(listing, "\t\t%s\t\t%s\n", TokenName[token], tokenString);
 }
 
 /* Function newStmtNode creates a new statement
