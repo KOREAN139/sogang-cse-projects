@@ -8,8 +8,8 @@
 %{
 #include "globals.h"
 #include "util.h"
-#include "scan.h"
-/* lexeme of identifier or reserved word */
+/* follow standard C identifier length */
+#define MAXTOKENLEN 31
 char tokenString[MAXTOKENLEN+1];
 %}
 
@@ -87,3 +87,4 @@ TokenType getToken(void)
   return currentToken;
 }
 
+yywrap() { /* actions for reaching EOF */ }
