@@ -79,10 +79,10 @@ TokenType getToken(void)
                 yyout = listing;
         }
         currentToken = yylex();
-        strncpy(tokenString,yytext,MAXTOKENLEN);
+        strncpy(tokenString, yytext, MAXTOKENLEN);
         if (TraceScan) {
-                fprintf(listing,"\t%d",lineno);
-                printToken(currentToken,tokenString);
+                fprintf(listing, "\t%d", lineno);
+                printToken(currentToken, tokenString);
         }
         return currentToken;
 }
