@@ -44,18 +44,10 @@ void printToken(TokenType token, const char *tokenString)
         case NUM:
         case ID:
         case ERROR:
-                printTokenTableRow(token, tokenString);
+                fprintf(listing, "\t\t%s\t\t%s\n",
+                        TokenName[token], tokenString);
                 break;
         default: /* should never happen */
                 fprintf(listing, "Unknown token: %d\n", token);
         }
-}
-
-/* 
- * Function printTokenTableRow prints row for token table
- */
-void printTokenTableRow(TokenType token, const char *tokenString)
-{
-        fprintf(listing, "\t\t%s\t\t%s\n",
-                TokenName[token], tokenString);
 }

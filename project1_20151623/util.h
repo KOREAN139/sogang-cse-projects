@@ -7,10 +7,4 @@
  */
 void printToken(TokenType, const char *);
 
-/* 
- * Function printTokenTableRow prints row for
- * token table
- */
-void printTokenTableRow(TokenType, const char *);
-
 #endif
