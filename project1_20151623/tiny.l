@@ -8,9 +8,11 @@
 %{
 #include "globals.h"
 #include "util.h"
+#include "stdio.h"
 /* follow standard C identifier length */
 #define MAXTOKENLEN 31
 char tokenString[MAXTOKENLEN+1];
+void yyerror(char const *msg);
 %}
 
 digit       [0-9]
@@ -56,7 +58,7 @@ whitespace  [ \t]+
                         break;
                     }
                     if ( c == EOF )
-                    { error( "EOF in comment" );
+                    { yyerror( "EOF in comment" );
                       break;
                     }
                   }
@@ -81,10 +83,11 @@ TokenType getToken(void)
   currentToken = yylex();
   strncpy(tokenString,yytext,MAXTOKENLEN);
   if (TraceScan) {
-    fprintf(listing,"\t%d: ",lineno);
+    fprintf(listing,"\t%d",lineno);
     printToken(currentToken,tokenString);
   }
   return currentToken;
 }
 
-yywrap() { /* actions for reaching EOF */ }
+int yywrap() { /* actions for reaching EOF */ }
+void yyerror(char const *msg) { fprintf (stderr, "%s", msg); }
