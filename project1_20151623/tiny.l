@@ -51,18 +51,20 @@ whitespace  [ \t]+
 ";"             {return SEMI;}
 "/*"            { register int c;
                   for ( ; ; )
-                  { while ( (c = input()) != '*' && c != EOF );
+                  { while ( (c = input()) != '*' && c != EOF ) lineno += c == '\n';
                     if ( c == '*' )
                     { while ( (c = input()) == '*' );
+                      lineno += c == '\n';
                       if ( c == '/' )
                         break;
                     }
                     if ( c == EOF )
-                    { yyerror( "EOF in comment" );
-                      break;
+                    { yyerror( "Comment Error" );
+                      return ERROR;
                     }
                   }
                 }
+<<EOF>>         {return ENDFILE;}
 {number}        {return NUM;}
 {identifier}    {return ID;}
 {newline}       {lineno++;}
@@ -90,4 +92,4 @@ TokenType getToken(void)
 }
 
 int yywrap() { /* actions for reaching EOF */ }
-void yyerror(char const *msg) { fprintf (stderr, "%s", msg); }
+void yyerror(char const *msg) { strcpy(yytext, msg); }
