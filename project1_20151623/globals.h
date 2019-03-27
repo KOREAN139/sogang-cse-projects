@@ -17,25 +17,30 @@
 /* MAXRESERVED = the number of reserved words */
 #define MAXRESERVED 8
 
-typedef enum 
-    /* book-keeping tokens */
-   {ENDFILE,ERROR,
-    /* reserved words */
-    IF,ELSE,INT,RETURN,VOID,WHILE,
-    /* multicharacter tokens */
-    ID,NUM,
-    /* special symbols */
-    ASSIGN,EQ,NEQ,LT,LTE,GT,GTE,PLUS,MINUS,TIMES,OVER,LPAREN,RPAREN,
-    LBRAC,RBRAC,LCURLY,RCURLY,COMMA,SEMI
-   } TokenType;
+typedef enum {
+        /* book-keeping tokens */
+        ENDFILE, ERROR,
+        /* reserved words */
+        IF, ELSE, INT, RETURN, VOID, WHILE,
+        /* multicharacter tokens */
+        ID, NUM,
+        /* special symbols */
+        ASSIGN, EQ, NEQ, LT, LTE, GT, GTE, PLUS, MINUS, TIMES, OVER,
+        LPAREN, RPAREN, LBRAC, RBRAC, LCURLY, RCURLY, COMMA, SEMI
+} TokenType;
 
-extern FILE* source; /* source code text file */
-extern FILE* listing; /* listing output text file */
-extern FILE* code; /* code text file for TM simulator */
+/* source code text file */
+extern FILE *source;
+/* listing output text file */
+extern FILE *listing;
+/* code text file for TM simulator */
+extern FILE *code;
 
-extern int lineno; /* source line number for listing */
+/* source line number for listing */
+extern int lineno;
 
-/* TraceScan = TRUE causes token information to be
+/* 
+ * TraceScan = TRUE causes token information to be
  * printed to the listing file as each token is
  * recognized by the scanner
  */
