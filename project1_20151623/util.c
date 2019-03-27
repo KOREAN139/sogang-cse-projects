@@ -1,7 +1,7 @@
 #include "globals.h"
 #include "util.h"
 
-static char const *TokenName[] = {
+static char const *tokenName[] = {
         "EOF", "ERROR", "IF", "ELSE", "INT", "RETURN", "VOID",
         "WHILE", "ID", "NUM", "=", "==", "!=", "<", "<=", ">",
         ">=", "+", "-", "*", "/", "(", ")", "[", "]", "{", "}",
@@ -45,7 +45,7 @@ void printToken(TokenType token, const char *tokenString)
         case ID:
         case ERROR:
                 fprintf(listing, "\t\t%s\t\t%s\n",
-                        TokenName[token], tokenString);
+                        tokenName[token], tokenString);
                 break;
         default: /* should never happen */
                 fprintf(listing, "Unknown token: %d\n", token);
