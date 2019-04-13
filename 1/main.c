@@ -25,6 +25,7 @@
 int main(int argc, char *argv[]) {
         key_t key;
         int msgqid;
+	int input_pid, output_pid;
 
         /* initialize message queue */
         key = ftok(__FILE__, 'Z');
@@ -34,7 +35,7 @@ int main(int argc, char *argv[]) {
         }
 
         /* fork input process */
-        switch(fork()) {
+        switch(input_pid = fork()) {
         case 0:
                 input_process();
                 exit(0);
@@ -47,7 +48,7 @@ int main(int argc, char *argv[]) {
         }
 
         /* fork output process */
-        switch(fork()) {
+        switch(output_pid = fork()) {
         case 0:
                 output_process();
                 exit(0);
@@ -65,6 +66,12 @@ int main(int argc, char *argv[]) {
                         perror("(O) Error occurred msgrcv()");
                 }
                 printf("(M) Got %s\n", message.msg);
+
+		if (!strcmp(message.msg, "BACK")) {
+			kill(input_pid, SIGTERM);
+			kill(output_pid, SIGTERM);
+			break;
+		}
 
                 //TODO: do proper job in here
 

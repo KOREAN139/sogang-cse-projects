@@ -20,6 +20,7 @@ void input_process()
 	struct input_event ev[BUFF_SIZE];
 	int fd, rd, value, flags, size = sizeof (struct input_event);
 	char *device = "/dev/input/event0";
+	char *msg;
 
 	/* Variables for switch input (SW1-9) */
 	int swfd, swflag, pressed;
@@ -81,21 +82,21 @@ void input_process()
 		if (value == KEY_RELEASE) {
 			switch(ev[0].code) {
 			case KEY_PROG:
-				printf("PROG\n");
+				msg = "PROG";
 				break;
 			case KEY_BACK:
-				printf("BACK\n");
+				msg = "BACK";
 				break;
 			case KEY_VOLUMEUP:
-				printf("VOLUME UP\n");
+				msg = "VOLUME_UP";
 				break;
 			case KEY_VOLUMEDOWN:
-				printf("VOLUME DOWN\n");
+				msg = "VOLUME_DOWN";
 				break;
 			default:
 				break;
 			}
-			enqueue_message(msgqid, (long)INPUT, "Key");
+			enqueue_message(msgqid, (long)INPUT, msg);
 		}
 		usleep(10000);
 	}
