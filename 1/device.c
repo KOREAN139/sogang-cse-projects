@@ -28,6 +28,25 @@ int open_drivers() {
         return error_flag;
 }
 
+void write_fnd(char *input) {
+	write(driver[0], &input, sizeof(input));
+}
+
+void write_lcd(char *input, int len) {
+#define MAX_BUFF	32
+#define LINE_BUFF	16
+	unsigned char string[MAX_BUFF];
+	memset(string, ' ', sizeof(string));
+	memcpy(string, input, len);
+	write(driver[1], string, MAX_BUFF);
+#undef MAX_BUFF
+#undef LINE_BUFF
+}
+
+void write_dot(char *input) {
+	write(driver[2], input, sizeof(input));
+}
+
 /**
  * close_drivers - close device drivers
  */
