@@ -4,6 +4,7 @@
 
 #include "globals.h"
 #include "process.h"
+#include "modes.h"
 
 #define QUEUE_PERMS 0644
 
@@ -16,6 +17,7 @@ int main(int argc, char *argv[]) {
         key_t key;
         int msgqid;
 	int input_pid, output_pid;
+        int mode = 0;
 
         /* initialize message queue */
         key = ftok(__FILE__, 'Z');
@@ -64,8 +66,11 @@ int main(int argc, char *argv[]) {
                         case KEY_PROG:
                                 break;
                         case KEY_VOLUMEUP:
-                                break;
                         case KEY_VOLUMEDOWN:
+                                initialize_board();
+                                mode += msg[KEY_ENV] - KEY_VOLUMEDOWN ? 1 : -1;
+                                mode = (mode + 5) % 5;
+                                initiate_mode(mode);
                                 break;
                         case KEY_BACK:
 			        kill(input_pid, SIGTERM);

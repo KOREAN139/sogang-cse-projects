@@ -1,7 +1,7 @@
 CC = arm-none-linux-gnueabi-gcc
 CFLAGS = -static
 TARGET = 20151623
-OBJECTS = process.o main.o
+OBJECTS = process.o modes.o main.o
 
 all : $(TARGET)
 
