@@ -9,9 +9,25 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
-#include "globals.h"
 
 #define QUEUE_PERMS 0644
+#define MSG_LEN 256
+
+/*
+ * Message types
+ */
+#define INPUT		1
+#define OUTPUT		2
+
+/**
+ * struct msg_t - used by processes to communicate w/ message queue
+ * @mtype: type for current message
+ * @msg: data which current message contains
+ */
+typedef struct msg_t {
+        long mtype;
+        char msg[MSG_LEN];
+} msg_t;
 
 /**
  * get_message_qid - get message queue id
