@@ -29,7 +29,7 @@ int open_drivers() {
 }
 
 void write_fnd(char *input) {
-	write(driver[0], &input, sizeof(input));
+	write(driver[0], input, 4);
 }
 
 void write_lcd(char *input, int len) {
@@ -44,7 +44,7 @@ void write_lcd(char *input, int len) {
 }
 
 void write_dot(char *input) {
-	write(driver[2], input, sizeof(input));
+	write(driver[2], input, 10);
 }
 
 /**

@@ -54,6 +54,7 @@ int main(int argc, char *argv[]) {
                 goto TERM;
         }
 
+	initialize_board();
         do {
                 msg_t message;
                 if (receive_message(msgqid, (long)INPUT, &message)) {
@@ -81,12 +82,12 @@ int main(int argc, char *argv[]) {
                         default:
                                 break;
                         }
-			printf("RECEIVED KEY %d\n", message.msg[KEY_ENV]);
 		}
         } while(1);
 
 TERM:
         msgctl(msgqid, IPC_RMID, (struct msqid_ds *)NULL);
+	initialize_board();
         close_drivers();
 
         return 0;
