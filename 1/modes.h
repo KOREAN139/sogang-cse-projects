@@ -23,6 +23,8 @@
  * Options for lcd opertaion
  */
 #define LCD_RESET		0
+#define LCD_ADD_CHAR		1
+#define LCD_REPLACE		2
 
 /*
  * Options for dot matrix operation
