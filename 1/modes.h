@@ -6,6 +6,14 @@
 #define _MODES_H_
 
 #include <stdio.h>
+#include <unistd.h>
+
+/*
+ * Flags for SIGALRM
+ */
+#define FLAG_BLINK		1
+#define FLAG_MODE_1		2
+#define FLAG_MODE_4		4
 
 /*
  * Bit masking for switch input
@@ -26,6 +34,11 @@
 /* typedef for function pointer */
 typedef void (*mode_func_ptr)(int);
 
+/**
+ * periodic_control - alarm signal handler for periodic output
+ * @signo: signal number
+ */
+void periodic_control(int signo);
 /**
  * initialize_board - initialize board states
  */

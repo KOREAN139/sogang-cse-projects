@@ -56,11 +56,13 @@ int main(int argc, char *argv[]) {
 
 	initialize_board();
 	initiate_mode(mode);
+	signal(SIGALRM, periodic_control);
 
         do {
                 msg_t message;
                 if (receive_message(msgqid, (long)INPUT, &message)) {
                         printf("(M) Failed to receive message\n");
+			continue;
                 }
 
                 if (message.msg[FLAG_SWITCH]) {

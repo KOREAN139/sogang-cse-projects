@@ -15,8 +15,8 @@ static unsigned char lcd_array[8];
 static int lcd_idx;
 /* variables for dot matrix */
 static unsigned char dot_array[10];
-static int dx[] = {0, 0, -1, 1};	/* for cursor move */
-static int dy[] = {1, -1, 0, 0};	/* for cursor move */
+static int dx[] = {1, -1};		/* for cursor move */
+static int dy[] = {1, -1};		/* for cursor move */
 static int cx, cy;			/* for trace cursor */
 static int dot_input_mode;
 static unsigned char dot_char[][10] = {
@@ -123,14 +123,14 @@ void control_lcd(int op, char ch) {
 		break;
 	case LCD_ADD_CHAR:
 		lcd_idx += 1;
-		if (lcd_idx == MAX_WIDTH) {
+		if (lcd_idx > MAX_WIDTH) {
 			for (i = 1; i < MAX_WIDTH; i++) {
 				lcd_array[i-1] = lcd_array[i];
 			}
-			lcd_idx = MAX_WIDTH - 1;
+			lcd_idx = MAX_WIDTH;
 		}
 	case LCD_REPLACE:
-		lcd_array[lcd_idx] = ch;
+		lcd_array[lcd_idx - 1] = ch;
 		break;
 	default:
 		break;
@@ -152,16 +152,23 @@ void control_dot(int op) {
 #define MAT_HEIGHT	10
 	/* variable for loop counter */
 	int i;
+	/* variable for temporary use */
+	int t;
 	/* variable for message queue */
 	int qid;
 
 	switch (op) {
 	case DOT_CURSOR_UP:
+		cy = (cy + dy[1] + MAT_HEIGHT) % MAT_HEIGHT;
+		break;
 	case DOT_CURSOR_DOWN:
+		cy = (cy + dy[0] + MAT_HEIGHT) % MAT_HEIGHT;
+		break;
 	case DOT_CURSOR_LEFT:
+		cx = (cx + dx[1] + MAT_WIDTH) % MAT_WIDTH;
+		break;
 	case DOT_CURSOR_RIGHT:
-		cx = (cx + dx[op] + MAT_WIDTH) % MAT_WIDTH;
-		cy = (cy + dy[op] + MAT_HEIGHT) % MAT_HEIGHT;
+		cx = (cx + dx[0] + MAT_WIDTH) % MAT_WIDTH;
 		break;
 	case DOT_CURSOR_SHOW:
 		// TODO: implement this
@@ -173,7 +180,7 @@ void control_dot(int op) {
 		memset(dot_array, 0, sizeof(dot_array));
 		break;
 	case DOT_SELECT:
-		// TODO: implement this
+		dot_array[cy] ^= 1 << (6 - cx);
 		break;
 	case DOT_REVERSE:
 		for (i = 0; i < 10; i++) {
