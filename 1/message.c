@@ -38,6 +38,9 @@ int enqueue_message(int qid, long mtype, int dtype, char *msg) {
 	case DATA_LED:
 		len = 1;
 		break;
+	case DATA_TERM:
+		len = 0;
+		break;
 	default:
 		break;
 	}

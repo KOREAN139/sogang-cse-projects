@@ -27,6 +27,7 @@
 #define DATA_LCD	2
 #define DATA_DOT	4
 #define DATA_LED	8
+#define DATA_TERM	16
 
 /**
  * struct msg_t - used by processes to communicate w/ message queue

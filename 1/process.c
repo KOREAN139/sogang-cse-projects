@@ -116,6 +116,7 @@ void input_process()
  * output_process - get results from main process, then print to board
  */
 void output_process() {
+	int flag = 1;
         int msgqid;
 
 	open_drivers();
@@ -144,10 +145,13 @@ void output_process() {
 		case DATA_LED:
 			write_led(message.msg[0]);
 			break;
+		case DATA_TERM:
+			close_drivers();
+			flag = 0;
+			break;
 		default:
 			break;
 		}
-        } while(1);
+        } while(flag);
 
-	close_drivers();
 };

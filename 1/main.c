@@ -86,7 +86,10 @@ int main(int argc, char *argv[]) {
                                 break;
                         case KEY_BACK:
 			        kill(input_pid, SIGKILL);
-			        kill(output_pid, SIGKILL);
+				initialize_board();
+				enqueue_message(msgqid, (long)OUTPUT,
+						DATA_TERM, 0);
+				wait(NULL);
                                 goto TERM;
                         default:
                                 break;
@@ -96,7 +99,6 @@ int main(int argc, char *argv[]) {
 
 TERM:
         msgctl(msgqid, IPC_RMID, (struct msqid_ds *)NULL);
-	initialize_board();
 
         return 0;
 }
