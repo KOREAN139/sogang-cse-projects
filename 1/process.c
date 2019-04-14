@@ -20,7 +20,7 @@ void input_process()
 	struct input_event ev[BUFF_SIZE];
 	int fd, rd, value, flags, size = sizeof (struct input_event);
 	char *device = "/dev/input/event0";
-	char *msg;
+	char msg[256];
 
 	/* Variables for switch input (SW1-9) */
 	int swfd, swflag, pressed;
@@ -69,8 +69,15 @@ void input_process()
 			usleep(10000);
 		} while (swflag); /* read input until switch is released */
 
+                /* when switch has released, enqueue input */
 		if (pressed) {
-			enqueue_message(msgqid, (long)INPUT, "Switch");
+                        memset(msg, 0, sizeof(msg));
+                        /* set switch flag & input */
+                        msg[FLAG_SWITCH] = 1;
+                        for (i = 0; i < 9; i++) {
+                                msg[i] = pushed[i];
+                        }
+			enqueue_message(msgqid, (long)INPUT, msg);
 		}
 
 		if ((rd = read(fd, ev, size * BUFF_SIZE)) < size) {
@@ -79,19 +86,17 @@ void input_process()
 
 		value = ev[0].value;
 
+                /* when key has released, enqueue input */
 		if (value == KEY_RELEASE) {
+                        memset(msg, 0, sizeof(msg));
+                        /* set key flag & input */
+                        msg[FLAG_ENV] = 1;
 			switch(ev[0].code) {
 			case KEY_PROG:
-				msg = "PROG";
-				break;
 			case KEY_BACK:
-				msg = "BACK";
-				break;
 			case KEY_VOLUMEUP:
-				msg = "VOLUME_UP";
-				break;
 			case KEY_VOLUMEDOWN:
-				msg = "VOLUME_DOWN";
+                                msg[KEY_ENV] = ev[0].code;
 				break;
 			default:
 				break;

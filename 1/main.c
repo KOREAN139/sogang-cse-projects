@@ -65,15 +65,26 @@ int main(int argc, char *argv[]) {
                 if (msgrcv(msgqid, &message, sizeof(msg_t)-sizeof(long), INPUT, 0) == -1) {
                         perror("(O) Error occurred msgrcv()");
                 }
-                printf("(M) Got %s\n", message.msg);
 
-		if (!strcmp(message.msg, "BACK")) {
-			kill(input_pid, SIGTERM);
-			kill(output_pid, SIGTERM);
-			break;
+                if (msg[FLAG_SWITCH]) {
+                }
+
+                if (msg[FLAG_ENV]) {
+                        switch(msg[KEY_ENV]) {
+                        case KEY_PROG:
+                                break;
+                        case KEY_VOLUMEUP:
+                                break;
+                        case KEY_VOLUMEDOWN:
+                                break;
+                        case KEY_BACK:
+			        kill(input_pid, SIGTERM);
+			        kill(output_pid, SIGTERM);
+			        break;
+                        default:
+                                break;
+                        }
 		}
-
-                //TODO: do proper job in here
 
 		/*
                 message.mtype = OUTPUT;
