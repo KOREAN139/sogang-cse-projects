@@ -18,8 +18,11 @@ int main(int argc, char *argv[]) {
         int msgqid;
 	/* variables for process id */
 	int input_pid, output_pid;
-	/* variable for mode */
+	/* variables for mode */
         int mode = 0;
+	int input;
+	/* variable for loop counter */
+	int i;
 
         /* fork input process */
         switch (input_pid = fork()) {
@@ -67,6 +70,11 @@ int main(int argc, char *argv[]) {
                 }
 
                 if (message.msg[FLAG_SWITCH]) {
+			input = 0;
+			for (i = 0; i < 9; i++) {
+				input |= (message.msg[i] << i);
+			}
+			run_mode(mode, input);
                 }
 
                 if (message.msg[FLAG_ENV]) {
