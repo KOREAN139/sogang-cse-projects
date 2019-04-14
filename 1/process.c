@@ -5,6 +5,7 @@
 #include "process.h"
 #include "globals.h"
 #include "message.h"
+#include "device.h"
 
 #define QUEUE_PERMS 0644
 #define BUFF_SIZE 64

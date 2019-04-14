@@ -6,6 +6,7 @@
 #include "process.h"
 #include "modes.h"
 #include "message.h"
+#include "device.h"
 
 #define QUEUE_PERMS 0644
 
@@ -18,11 +19,6 @@ int main(int argc, char *argv[]) {
         int msgqid;
 	int input_pid, output_pid;
         int mode = 0;
-
-        /* initialize message queue */
-        if ((msgqid = get_message_qid()) == -1) {
-                perror("Error occurred while create message queue");
-        }
 
         /* fork input process */
         switch(input_pid = fork()) {
@@ -48,6 +44,16 @@ int main(int argc, char *argv[]) {
                 break;
         default:
                 break;
+        }
+
+        /* initialize message queue */
+        if ((msgqid = get_message_qid()) == -1) {
+                perror("Error occurred while create message queue");
+        }
+
+        /* open device drivers */
+        if (open_drivers()) {
+                goto TERM;
         }
 
         do {
@@ -82,7 +88,7 @@ int main(int argc, char *argv[]) {
 
 TERM:
         msgctl(msgqid, IPC_RMID, (struct msqid_ds *)NULL);
+        close_drivers();
 
         return 0;
 }
-
