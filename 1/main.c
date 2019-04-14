@@ -14,8 +14,11 @@
  * output_process
  */
 int main(int argc, char *argv[]) {
+	/* variable for message queue */
         int msgqid;
+	/* variables for process id */
 	int input_pid, output_pid;
+	/* variable for mode */
         int mode = 0;
 
         /* fork input process */
