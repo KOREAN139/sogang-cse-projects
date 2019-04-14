@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
                         case KEY_BACK:
 			        kill(input_pid, SIGTERM);
 			        kill(output_pid, SIGTERM);
-			        break;
+                                goto TERM;
                         default:
                                 break;
                         }
@@ -94,6 +94,7 @@ int main(int argc, char *argv[]) {
 		*/
         } while(1);
 
+TERM:
         msgctl(msgqid, IPC_RMID, (struct msqid_ds *)NULL);
 
         return 0;
