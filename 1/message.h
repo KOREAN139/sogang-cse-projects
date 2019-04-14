@@ -5,9 +5,13 @@
 #ifndef _MESSAGE_H_
 #define _MESSAGE_H_
 
+#include <string.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
+#include "globals.h"
+
+#define QUEUE_PERMS 0644
 
 /**
  * get_message_qid - get message queue id

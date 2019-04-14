@@ -8,8 +8,6 @@
 #include "message.h"
 #include "device.h"
 
-#define QUEUE_PERMS 0644
-
 /**
  * main - initialize message queue, gets INPUT type message from input_process
  * do proper job w/ key input & current mode, then passes result to
@@ -62,17 +60,17 @@ int main(int argc, char *argv[]) {
                         printf("(M) Failed to receive message\n");
                 }
 
-                if (msg[FLAG_SWITCH]) {
+                if (message.msg[FLAG_SWITCH]) {
                 }
 
-                if (msg[FLAG_ENV]) {
-                        switch(msg[KEY_ENV]) {
+                if (message.msg[FLAG_ENV]) {
+                        switch(message.msg[KEY_ENV]) {
                         case KEY_PROG:
                                 break;
                         case KEY_VOLUMEUP:
                         case KEY_VOLUMEDOWN:
                                 initialize_board();
-                                mode += msg[KEY_ENV] - KEY_VOLUMEDOWN ? 1 : -1;
+                                mode += message.msg[KEY_ENV] - KEY_VOLUMEDOWN ? 1 : -1;
                                 mode = (mode + 5) % 5;
                                 initiate_mode(mode);
                                 break;

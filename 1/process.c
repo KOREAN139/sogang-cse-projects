@@ -18,6 +18,9 @@ void input_process()
 	/* Variables for loop counter */
 	int i, j;
 
+	/* Variable for message queue */
+	int msgqid;
+
 	/* Variables for switch input (BACK, PROG, ...) */
 	struct input_event ev[BUFF_SIZE];
 	int fd, rd, value, flags, size = sizeof (struct input_event);
