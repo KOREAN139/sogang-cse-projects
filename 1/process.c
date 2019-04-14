@@ -131,7 +131,6 @@ void output_process() {
                         printf("(O) Failed to receive message\n");
                 }
 
-		message.dtype);
 		switch (message.dtype) {
 		case DATA_FND:
 			write_fnd(message.msg);
