@@ -35,7 +35,7 @@ void input_process()
 	char *sw = "/dev/fpga_push_switch";
 
         if ((msgqid = get_message_qid()) == -1) {
-                perror("(I) Error occurred while get message queue");
+                printf("(I) Error occurred while get message queue");
         }
 
 	if((fd = open (device, O_RDONLY)) == -1) {
@@ -75,7 +75,7 @@ void input_process()
                         for (i = 0; i < 9; i++) {
                                 msg[i] = pushed[i];
                         }
-			if (enqueue_message(msgqid, (long)INPUT, msg)) {
+			if (enqueue_message(msgqid, (long)INPUT, DATA_INPUT, msg)) {
                                 printf("(I) Failed to enqueue switch input\n");
                         }
 		}
@@ -101,7 +101,7 @@ void input_process()
 			default:
 				break;
 			}
-			if (enqueue_message(msgqid, (long)INPUT, msg)) {
+			if (enqueue_message(msgqid, (long)INPUT, DATA_INPUT, msg)) {
                                 printf("(I) Failed to enqueue env key input\n");
                         }
 		}
@@ -118,17 +118,37 @@ void input_process()
 void output_process() {
         int msgqid;
 
+	open_drivers();
+
         /* get message queue id for output_process <-> main_process */
         if ((msgqid = get_message_qid()) == -1) {
-                perror("(O) Error occurred while get message queue");
+                printf("(O) Error occurred while get message queue");
         }
 
         do {
-                msg_t message;
+		msg_t message;
                 if (receive_message(msgqid, (long)OUTPUT, &message)) {
                         printf("(O) Failed to receive message\n");
                 }
 
-                /* TODO: print result properly in here */
+		message.dtype);
+		switch (message.dtype) {
+		case DATA_FND:
+			write_fnd(message.msg);
+			break;
+		case DATA_LCD:
+			write_lcd(message.msg);
+			break;
+		case DATA_DOT:
+			write_dot(message.msg);
+			break;
+		case DATA_LED:
+			write_led(message.msg[0]);
+			break;
+		default:
+			break;
+		}
         } while(1);
+
+	close_drivers();
 };

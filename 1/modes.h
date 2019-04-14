@@ -72,5 +72,10 @@ DECLARE_MODE_FUNCTION(4);
  *	 if i-th switch has pressed, i-th bit masked as 1
  */
 DECLARE_MODE_FUNCTION(5);
+/**
+ * send_result - send result of task to output process
+ * @type: type of device (use defined constant in message.h)
+ */
+void send_result(int type);
 
 #endif

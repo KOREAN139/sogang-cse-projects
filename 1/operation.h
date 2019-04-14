@@ -5,6 +5,7 @@
 #ifndef _OPERATION_H_
 #define _OPERATIOM_H_
 
+#include <stdio.h>
 #include <string.h>
 #include <time.h>
 
@@ -41,6 +42,16 @@
 #define DOT_CURSOR_DOWN		8
 #define DOT_REVERSE		9
 
+/*
+ * Options for led operation
+ */
+#define LED_RESET		0
+#define LED_SET			1
+
+/**
+ * get_fnd_base - returns current value of fnd_base
+ */
+int get_fnd_base();
 /**
  * control_fnd - control input for fnd on board
  * @op: option which decides operation for this function
@@ -53,9 +64,15 @@ void control_fnd(int op);
  */
 void control_lcd(int op, char ch);
 /**
- * control_dot - control input dot matrix on board
+ * control_dot - control input for dot matrix on board
  * @op: option which decides operation for this function
  */
 void control_dot(int op);
+/**
+ * control_led - control input for led on board
+ * @op: option which decides operation for this function
+ * @mask: bit-masked led on-off data
+ */
+void control_led(int op, unsigned char mask);
 
 #endif

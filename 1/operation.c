@@ -3,7 +3,7 @@
  */
 
 #include "operation.h"
-#include "device.h"
+#include "message.h"
 
 /* variables for fnd*/
 static unsigned char fnd_array[4];
@@ -11,7 +11,7 @@ static int fnd_curr;			/* for mode 2 */
 static int fnd_base;			/* for mode 2 */
 static int b;				/* for mode 2 */
 /* variables for lcd */
-static char lcd_array[8];
+static unsigned char lcd_array[8];
 static int lcd_idx;
 /* variables for dot matrix */
 static unsigned char dot_array[10];
@@ -23,6 +23,8 @@ static unsigned char dot_char[][10] = {
 	{0x1c, 0x36, 0x63, 0x63, 0x63, 0x7f, 0x7f, 0x63, 0x63, 0x63},	/* A */
 	{0x0c, 0x1c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x3f, 0x3f}	/* 1 */
 };
+/* variable for led */
+static unsigned char led_mask[1];
 
 static void update_base() {
 	if (fnd_base == 2) {
@@ -34,6 +36,10 @@ static void update_base() {
 	}
 }
 
+int get_fnd_base() {
+	return fnd_base;
+}
+
 void control_fnd(int op) {
 	/* variables for digit->string convert loop */
 	int i, cur;
@@ -41,6 +47,8 @@ void control_fnd(int op) {
 	int h, m;
 	time_t t;
 	struct tm tm;
+	/* variable for message queue */
+	int qid;
 
 	switch (op) {
 	case FND_INCREASE:
@@ -90,12 +98,23 @@ void control_fnd(int op) {
 			cur /= b;
 		}
 	}
+
+	/* send current state to ouput_process */
+	if((qid = get_message_qid()) == -1) {
+		printf("(FND) Error occurred while get message queue");
+	}
+
+	if(enqueue_message(qid, (long)OUTPUT, DATA_FND, fnd_array)) {
+		printf("(FND) Failed to enqueue switch input\n");
+	}
 }
 
 void control_lcd(int op, char ch) {
 #define MAX_WIDTH	8
 	/* variable for loop counter */
 	int i;
+	/* variable for message queue */
+	int qid;
 
 	switch (op) {
 	case LCD_RESET:
@@ -116,6 +135,15 @@ void control_lcd(int op, char ch) {
 	default:
 		break;
 	}
+
+	/* send current state to ouput_process */
+	if((qid = get_message_qid()) == -1) {
+		printf("(LCD) Error occurred while get message queue");
+	}
+
+	if(enqueue_message(qid, (long)OUTPUT, DATA_LCD, lcd_array)) {
+		printf("(LCD) Failed to enqueue switch input\n");
+	}
 #undef MAX_WIDTH
 }
 
@@ -124,6 +152,8 @@ void control_dot(int op) {
 #define MAT_HEIGHT	10
 	/* variable for loop counter */
 	int i;
+	/* variable for message queue */
+	int qid;
 
 	switch (op) {
 	case DOT_CURSOR_UP:
@@ -157,6 +187,40 @@ void control_dot(int op) {
 	default:
 		break;
 	}
+
+	/* send current state to ouput_process */
+	if((qid = get_message_qid()) == -1) {
+		printf("(DOT) Error occurred while get message queue");
+	}
+
+	if(enqueue_message(qid, (long)OUTPUT, DATA_DOT, dot_array)) {
+		printf("(DOT) Failed to enqueue switch input\n");
+	}
 #undef MAT_WIDTH
 #undef MAT_HEIGHT
+}
+
+void control_led(int op, unsigned char mask) {
+	/* variable for message queue */
+	int qid;
+
+	switch (op) {
+	case LED_RESET:
+		led_mask[0] = 0;
+		break;
+	case LED_SET:
+		led_mask[0] = mask;
+		break;
+	default:
+		break;
+	}
+
+	/* send current state to ouput_process */
+	if((qid = get_message_qid()) == -1) {
+		printf("(LED) Error occurred while get message queue");
+	}
+
+	if(enqueue_message(qid, (long)OUTPUT, DATA_LED, led_mask)) {
+		printf("(LED) Failed to enqueue switch input\n");
+	}
 }

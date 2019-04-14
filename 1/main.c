@@ -6,7 +6,6 @@
 #include "process.h"
 #include "modes.h"
 #include "message.h"
-#include "device.h"
 
 /**
  * main - initialize message queue, gets INPUT type message from input_process
@@ -55,11 +54,6 @@ int main(int argc, char *argv[]) {
                 perror("Error occurred while create message queue");
         }
 
-        /* open device drivers */
-        if (open_drivers()) {
-                goto TERM;
-        }
-
 	initialize_board();
 	initiate_mode(mode);
 
@@ -101,7 +95,6 @@ int main(int argc, char *argv[]) {
 TERM:
         msgctl(msgqid, IPC_RMID, (struct msqid_ds *)NULL);
 	initialize_board();
-        close_drivers();
 
         return 0;
 }

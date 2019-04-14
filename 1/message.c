@@ -14,11 +14,38 @@ int get_message_qid() {
         return qid;
 }
 
-int enqueue_message(int qid, long mtype, char *msg) {
+int enqueue_message(int qid, long mtype, int dtype, char *msg) {
+	/* variable for loop counter */
 	int i;
+	/* variable for msg length */
+	int len;
+	/* variable for message queue */
         msg_t message;
+
+	switch (dtype) {
+	case DATA_INPUT:
+		len = MSG_LEN;
+		break;
+	case DATA_FND:
+		len = 4;
+		break;
+	case DATA_LCD:
+		len = 8;
+		break;
+	case DATA_DOT:
+		len = 10;
+		break;
+	case DATA_LED:
+		len = 1;
+		break;
+	default:
+		break;
+	}
+
         message.mtype = mtype;
-	for (i = 0; i < MSG_LEN; i++) {
+        message.dtype = dtype;
+
+	for (i = 0; i < len; i++) {
 		message.msg[i] = msg[i];
 	}
         if (msgsnd(qid, &message, sizeof(msg_t)-sizeof(long), 0) == -1) {

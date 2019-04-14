@@ -3,6 +3,7 @@
  */
 
 #include "modes.h"
+#include "message.h"
 #include "operation.h"
 
 #define MODE_FUNCTION(num, ...) \
@@ -19,8 +20,9 @@ static mode_func_ptr modes[5] = {
  */
 void initialize_board() {
 	control_fnd(FND_RESET);
-	control_lcd(LCD_RESET, (char)0);
+	control_lcd(LCD_RESET, 0);
 	control_dot(DOT_RESET);
+	control_led(LED_RESET, 0);
 }
 
 /**
@@ -31,20 +33,19 @@ void initiate_mode(int mode) {
         case 0:
                 /*
                  * mode 1 - clock
-                 * set led(1) on
                  */
 		control_fnd(FND_SET_BOARD_TIME);
+		control_led(LED_SET, 1 << 7);
                 break;
         case 1:
                 /*
                  * mode 2 - counter
-                 * set led(2) on
                  */
+		control_led(LED_SET, 1 << 6);
                 break;
         case 2:
                 /*
                  * mode 3 - text editor
-                 * set dot matrix to print A
                  */
 		control_dot(DOT_PRINT_INPUT_MODE);
                 break;
@@ -87,6 +88,8 @@ MODE_FUNCTION(1, {
 })
 
 MODE_FUNCTION(2, {
+	int base;
+
 	switch (input) {
 	case SW_1:
 		control_fnd(FND_CHANGE_BASE);
@@ -103,6 +106,9 @@ MODE_FUNCTION(2, {
 	default:
 		break;
 	}
+
+	base = get_fnd_base();
+	control_led(LED_SET, 1 << (8 - base));
 })
 
 MODE_FUNCTION(3, {

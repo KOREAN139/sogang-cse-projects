@@ -19,13 +19,24 @@
 #define INPUT		1
 #define OUTPUT		2
 
+/*
+ * Data types
+ */
+#define DATA_INPUT	0
+#define DATA_FND	1
+#define DATA_LCD	2
+#define DATA_DOT	4
+#define DATA_LED	8
+
 /**
  * struct msg_t - used by processes to communicate w/ message queue
  * @mtype: type for current message
+ * @dtype: type for data which current message contains
  * @msg: data which current message contains
  */
 typedef struct msg_t {
         long mtype;
+	int dtype;
         char msg[MSG_LEN];
 } msg_t;
 
@@ -37,9 +48,10 @@ int get_message_qid();
  * enqueue_message - enqueue message with given data
  * @qid: queue id of message queue
  * @mtype: type for message
+ * @dtype: type for data which current message contains
  * @msg: data which message will contain
  */
-int enqueue_message(int qid, long mtype, char *msg);
+int enqueue_message(int qid, long mtype, int dtype, char *msg);
 /**
  * receive_message - receive message with given mtype
  * @qid: queue id of message queue
