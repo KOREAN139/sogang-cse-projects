@@ -29,7 +29,7 @@ static unsigned char dot_char[][10] = {
 void initialize_board() {
 	control_fnd(FND_RESET);
 	write_fnd(fnd_array);
-	control_lcd(LCD_RESET);
+	control_lcd(LCD_RESET, (char)0);
 	write_lcd(lcd_array);
 	control_dot(DOT_RESET);
 	write_dot(dot_array);

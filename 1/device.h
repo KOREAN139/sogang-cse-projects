@@ -9,11 +9,16 @@
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/mman.h>
 
 #define NUM_DRIVER	3
 #define FPGA_FND_DEVICE	"/dev/fpga_fnd"
 #define FPGA_LCD_DEVICE	"/dev/fpga_text_lcd"
 #define FPGA_DOT_DEVICE	"/dev/fpga_dot"
+
+#define MEMORY_DEVICE	"/dev/mem"
+#define LED_BASE_ADDR	0x08000000
+#define LED_ADDR	0x16
 
 /**
  * open_drivers - open device drivers
@@ -38,5 +43,10 @@ void write_lcd(char *input);
  * @input: 7x10 matrix string (unsigned char[10])
  */
 void write_dot(char *input);
+/**
+ * write_led - write input on led
+ * @input: led on-off bit-masked 8bit data
+ */
+void write_led(char input);
 
 #endif
