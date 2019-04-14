@@ -15,9 +15,12 @@ int get_message_qid() {
 }
 
 int enqueue_message(int qid, long mtype, char *msg) {
+	int i;
         msg_t message;
         message.mtype = mtype;
-        strcpy(message.msg, msg);
+	for (i = 0; i < MSG_LEN; i++) {
+		message.msg[i] = msg[i];
+	}
         if (msgsnd(qid, &message, sizeof(msg_t)-sizeof(long), 0) == -1) {
                 perror("Error occurred msgsnd()");
                 return -1;

@@ -75,12 +75,13 @@ int main(int argc, char *argv[]) {
                                 initiate_mode(mode);
                                 break;
                         case KEY_BACK:
-			        kill(input_pid, SIGTERM);
-			        kill(output_pid, SIGTERM);
+			        kill(input_pid, SIGKILL);
+			        kill(output_pid, SIGKILL);
                                 goto TERM;
                         default:
                                 break;
                         }
+			printf("RECEIVED KEY %d\n", message.msg[KEY_ENV]);
 		}
         } while(1);
 

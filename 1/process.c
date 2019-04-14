@@ -25,7 +25,7 @@ void input_process()
 	struct input_event ev[BUFF_SIZE];
 	int fd, rd, value, flags, size = sizeof (struct input_event);
 	char *device = "/dev/input/event0";
-	char msg[256];
+	char msg[MSG_LEN];
 
 	/* Variables for switch input (SW1-9) */
 	int swfd, swflag, pressed;

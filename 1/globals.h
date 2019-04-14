@@ -5,6 +5,8 @@
 #ifndef _GLOBALS_H_
 #define _GLOBALS_H_
 
+#define MSG_LEN 256
+
 /**
  * struct msg_t - used by processes to communicate w/ message queue
  * @mtype: type for current message
@@ -12,7 +14,7 @@
  */
 typedef struct msg_t {
         long mtype;
-        char msg[256];
+        char msg[MSG_LEN];
 } msg_t;
 
 /*
