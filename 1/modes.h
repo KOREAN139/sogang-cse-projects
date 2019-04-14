@@ -5,15 +5,19 @@
 #ifndef _MODES_H_
 #define _MODES_H_
 
+#include <time.h>
+
 /*
  * Options for fnd operation
  */
 #define FND_INCREASE		0
-#define FND_RESET		1
-#define FND_SET_BOARD_TIME	2
+#define FND_SET_BOARD_TIME	1
+#define FND_ADD_MINUTE		2
 #define FND_ADD_HOUR		3
 #define FND_ADD_BASE		4
 #define FND_ADD_SQUARE		5
+#define FND_CHANGE_BASE		6
+#define FND_RESET		7
 
 /*
  * Options for dot matrix operation

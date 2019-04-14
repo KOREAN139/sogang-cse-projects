@@ -91,7 +91,7 @@ void input_process()
                         memset(msg, 0, sizeof(msg));
                         /* set key flag & input */
                         msg[FLAG_ENV] = 1;
-			switch(ev[0].code) {
+			switch (ev[0].code) {
 			case KEY_PROG:
 			case KEY_BACK:
 			case KEY_VOLUMEUP:

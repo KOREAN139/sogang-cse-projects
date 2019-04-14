@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
         int mode = 0;
 
         /* fork input process */
-        switch(input_pid = fork()) {
+        switch (input_pid = fork()) {
         case 0:
                 input_process();
                 exit(0);
@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
         }
 
         /* fork output process */
-        switch(output_pid = fork()) {
+        switch (output_pid = fork()) {
         case 0:
                 output_process();
                 exit(0);
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
                 }
 
                 if (message.msg[FLAG_ENV]) {
-                        switch(message.msg[KEY_ENV]) {
+                        switch (message.msg[KEY_ENV]) {
                         case KEY_PROG:
                                 break;
                         case KEY_VOLUMEUP:
