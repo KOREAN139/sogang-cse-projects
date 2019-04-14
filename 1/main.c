@@ -55,6 +55,8 @@ int main(int argc, char *argv[]) {
         }
 
 	initialize_board();
+	initiate_mode(mode);
+
         do {
                 msg_t message;
                 if (receive_message(msgqid, (long)INPUT, &message)) {
