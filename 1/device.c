@@ -32,12 +32,12 @@ void write_fnd(char *input) {
 	write(driver[0], input, 4);
 }
 
-void write_lcd(char *input, int len) {
+void write_lcd(char *input) {
 #define MAX_BUFF	32
 #define LINE_BUFF	16
 	unsigned char string[MAX_BUFF];
 	memset(string, ' ', sizeof(string));
-	memcpy(string, input, len);
+	memcpy(string, input, 8);
 	write(driver[1], string, MAX_BUFF);
 #undef MAX_BUFF
 #undef LINE_BUFF

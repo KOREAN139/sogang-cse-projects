@@ -20,6 +20,11 @@
 #define FND_RESET		7
 
 /*
+ * Options for lcd opertaion
+ */
+#define LCD_RESET		0
+
+/*
  * Options for dot matrix operation
  */
 #define DOT_CURSOR_UP		0
@@ -47,6 +52,12 @@ void initiate_mode(int mode);
  * @op: option which decides operation for this function
  */
 void control_fnd(int op);
+/**
+ * control_lcd - control input for lcd on board
+ * @op: option which decides operation for this function
+ * @ch: character which append to string or replace last character
+ */
+void control_lcd(int op, char ch);
 /**
  * control_dot - control input dot matrix on board
  * @op: option which decides operation for this function

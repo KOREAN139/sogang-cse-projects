@@ -9,6 +9,9 @@
 static unsigned char fnd_array[4];
 static int fnd_curr;			/* for mode 2 */
 static int fnd_base = 2;		/* for mode 2 */
+/* variables for lcd */
+static char lcd_array[8];
+static int lcd_idx;
 /* variables for dot matrix */
 static unsigned char dot_array[10];
 static int dx[] = {0, 0, -1, 1};	/* for cursor move */
@@ -26,7 +29,8 @@ static unsigned char dot_char[][10] = {
 void initialize_board() {
 	control_fnd(FND_RESET);
 	write_fnd(fnd_array);
-	write_lcd((char *)0, 0);
+	control_lcd(LCD_RESET);
+	write_lcd(lcd_array);
 	control_dot(DOT_RESET);
 	write_dot(dot_array);
 }
@@ -46,14 +50,12 @@ void initiate_mode(int mode) {
         case 1:
                 /*
                  * mode 2 - counter
-                 * set fnd as 0000
                  * set led(2) on
                  */
                 break;
         case 2:
                 /*
                  * mode 3 - text editor
-                 * set fnd as 0000
                  * clear lcd
                  * set dot matrix to print A
                  */
@@ -61,7 +63,6 @@ void initiate_mode(int mode) {
         case 3:
                 /*
                  * mode 4 - draw board
-                 * set fnd as 0000
                  * set blinking dot on dot matrix
                  */
                 break;
@@ -136,6 +137,33 @@ void control_fnd(int op) {
 			cur /= b;
 		}
 	}
+}
+
+void control_lcd(int op, char ch) {
+#define MAX_WIDTH	8
+	/* variable for loop counter */
+	int i;
+
+	switch (op) {
+	case LCD_RESET:
+		lcd_idx = 0;
+		memset(lcd_array, ' ', sizeof(lcd_array));
+		break;
+	case LCD_ADD_CHAR:
+		lcd_idx += 1;
+		if (lcd_idx == MAX_WIDTH) {
+			for (i = 1; i < MAX_WIDTH; i++) {
+				lcd_array[i-1] = lcd_array[i];
+			}
+			lcd_idx = MAX_WIDTH - 1;
+		}
+	case LCD_REPLACE:
+		lcd_array[lcd_idx] = ch;
+		break;
+	default:
+		break;
+	}
+#undef MAX_WIDTH
 }
 
 void control_dot(int op) {

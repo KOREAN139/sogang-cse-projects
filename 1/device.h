@@ -31,9 +31,8 @@ void write_fnd(char *input);
 /**
  * write_lcd - write input on lcd
  * @input: string which will displayed on lcd
- * @len: length of input
  */
-void write_lcd(char *input, int len);
+void write_lcd(char *input);
 /**
  * write_dot - write input on dot matrix
  * @input: 7x10 matrix string (unsigned char[10])
