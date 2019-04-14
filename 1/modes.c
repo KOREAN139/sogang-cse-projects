@@ -129,6 +129,7 @@ void control_fnd(int op) {
 	}
 
 	if (op != FND_RESET) {
+		cur = fnd_curr;
 		/* convert digit to string */
 		for (i = 0; i < 4; i++) {
 			fnd_array[3-i] = cur % b;
