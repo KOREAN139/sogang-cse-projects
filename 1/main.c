@@ -5,6 +5,7 @@
 #include "globals.h"
 #include "process.h"
 #include "modes.h"
+#include "message.h"
 
 #define QUEUE_PERMS 0644
 
@@ -14,15 +15,12 @@
  * output_process
  */
 int main(int argc, char *argv[]) {
-        key_t key;
         int msgqid;
 	int input_pid, output_pid;
         int mode = 0;
 
         /* initialize message queue */
-        key = ftok(__FILE__, 'Z');
-        msgqid = msgget(key, QUEUE_PERMS | IPC_CREAT);
-        if (msgqid == -1) {
+        if ((msgqid = get_message_qid()) == -1) {
                 perror("Error occurred while create message queue");
         }
 
@@ -54,8 +52,8 @@ int main(int argc, char *argv[]) {
 
         do {
                 msg_t message;
-                if (msgrcv(msgqid, &message, sizeof(msg_t)-sizeof(long), INPUT, 0) == -1) {
-                        perror("(O) Error occurred msgrcv()");
+                if (receive_message(msgqid, (long)INPUT, &message)) {
+                        printf("(M) Failed to receive message\n");
                 }
 
                 if (msg[FLAG_SWITCH]) {
@@ -80,13 +78,6 @@ int main(int argc, char *argv[]) {
                                 break;
                         }
 		}
-
-		/*
-                message.mtype = OUTPUT;
-                if (msgsnd(msgqid, &message, sizeof(msg_t)-sizeof(long), 0) == -1) {
-                        perror("(I) Error occurred msgsnd()");
-                }
-		*/
         } while(1);
 
 TERM:

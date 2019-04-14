@@ -9,11 +9,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
-#include <sys/ipc.h>
-#include <sys/msg.h>
 
 #include <errno.h>
 #include <fcntl.h>
@@ -24,13 +21,6 @@
 #include <termios.h>
 #include <signal.h>
 
-/**
- * enqueue_message - enqueue message with given data
- * @qid: queue id of message queue
- * @mtype: type for message
- * @msg: data which message will contain
- */
-int enqueue_message(int qid, long mtype, char *msg);
 /**
  * input_process - get input from board, then pass key to main process
  */

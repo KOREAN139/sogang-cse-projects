@@ -4,6 +4,7 @@
 
 #include "process.h"
 #include "globals.h"
+#include "message.h"
 
 #define QUEUE_PERMS 0644
 #define BUFF_SIZE 64
@@ -29,14 +30,7 @@ void input_process()
 	int buff_size = sizeof(push_sw_buff);
 	char *sw = "/dev/fpga_push_switch";
 
-	/* Variables for message queue */
-        key_t key;
-        int msgqid;
-
-        /* get message queue id for input_process <-> main_process */
-        key = ftok(__FILE__, 'Z');
-        msgqid = msgget(key, QUEUE_PERMS | IPC_CREAT);
-        if (msgqid == -1) {
+        if ((msgqid = get_message_qid()) == -1) {
                 perror("(I) Error occurred while get message queue");
         }
 
@@ -77,7 +71,9 @@ void input_process()
                         for (i = 0; i < 9; i++) {
                                 msg[i] = pushed[i];
                         }
-			enqueue_message(msgqid, (long)INPUT, msg);
+			if (enqueue_message(msgqid, (long)INPUT, msg)) {
+                                printf("(I) Failed to enqueue switch input\n");
+                        }
 		}
 
 		if ((rd = read(fd, ev, size * BUFF_SIZE)) < size) {
@@ -101,7 +97,9 @@ void input_process()
 			default:
 				break;
 			}
-			enqueue_message(msgqid, (long)INPUT, msg);
+			if (enqueue_message(msgqid, (long)INPUT, msg)) {
+                                printf("(I) Failed to enqueue env key input\n");
+                        }
 		}
 		usleep(10000);
 	}
@@ -110,36 +108,22 @@ void input_process()
 	close(swfd);
 }
 
-int enqueue_message(int qid, long mtype, char *msg) {
-        msg_t message;
-        message.mtype = mtype;
-        strcpy(message.msg, msg); 
-        if (msgsnd(qid, &message, sizeof(msg_t)-sizeof(long), 0) == -1) {
-                perror("Error occurred msgsnd()");
-        }
-	return 0;
-};
-
 /**
  * output_process - get results from main process, then print to board
  */
 void output_process() {
-        key_t key;
         int msgqid;
 
         /* get message queue id for output_process <-> main_process */
-        key = ftok(__FILE__, 'Z');
-        msgqid = msgget(key, QUEUE_PERMS | IPC_CREAT);
-        if (msgqid == -1) {
+        if ((msgqid = get_message_qid()) == -1) {
                 perror("(O) Error occurred while get message queue");
         }
 
         do {
                 msg_t message;
-                if (msgrcv(msgqid, &message, sizeof(msg_t)-sizeof(long), OUTPUT, 0) == -1) {
-                        perror("(O) Error occurred msgrcv()");
+                if (receive_message(msgqid, (long)OUTPUT, &message)) {
+                        printf("(O) Failed to receive message\n");
                 }
-                printf("(O) got %s\n", message.msg);
 
                 /* TODO: print result properly in here */
         } while(1);
