@@ -3,11 +3,13 @@
  */
 
 #include "operation.h"
+#include "device.h"
 
 /* variables for fnd*/
 static unsigned char fnd_array[4];
 static int fnd_curr;			/* for mode 2 */
-static int fnd_base = 2;		/* for mode 2 */
+static int fnd_base;			/* for mode 2 */
+static int b;				/* for mode 2 */
 /* variables for lcd */
 static char lcd_array[8];
 static int lcd_idx;
@@ -22,14 +24,7 @@ static unsigned char dot_char[][10] = {
 	{0x0c, 0x1c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x3f, 0x3f}	/* 1 */
 };
 
-void control_fnd(int op) {
-	/* variables for digit->string convert loop */
-	int i, cur, b;
-	/* variables for board time */
-	int h, m;
-	time_t t;
-	struct tm tm;
-
+static void update_base() {
 	if (fnd_base == 2) {
 		b = 10;
 	} else if (fnd_base == 1) {
@@ -37,6 +32,15 @@ void control_fnd(int op) {
 	} else {
 		b = fnd_base - 3 ? 4 : 8;
 	}
+}
+
+void control_fnd(int op) {
+	/* variables for digit->string convert loop */
+	int i, cur;
+	/* variables for board time */
+	int h, m;
+	time_t t;
+	struct tm tm;
 
 	switch (op) {
 	case FND_INCREASE:
@@ -45,6 +49,7 @@ void control_fnd(int op) {
 	case FND_RESET:
 		fnd_curr = 0;
 		fnd_base = 2;
+		update_base();
 		memset(fnd_array, 0, sizeof(fnd_array));
 		break;
 	case FND_SET_BOARD_TIME:
@@ -70,6 +75,8 @@ void control_fnd(int op) {
 		break;
 	case FND_CHANGE_BASE:
 		fnd_base += fnd_base - 4 ? 1 : -3;
+		update_base();
+		fnd_curr %= b * b * b * b;
 		break;
 	default:
 		break;
