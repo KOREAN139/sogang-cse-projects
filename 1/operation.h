@@ -41,6 +41,7 @@
 #define DOT_CLEAR		7
 #define DOT_CURSOR_DOWN		8
 #define DOT_REVERSE		9
+#define DOT_CURSOR_HIDE		10
 
 /*
  * Options for led operation

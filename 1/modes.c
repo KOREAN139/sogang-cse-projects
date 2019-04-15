@@ -47,6 +47,7 @@ void periodic_control(int signo) {
 		}
 	}
 	if (alarm_flag & FLAG_MODE_4) {
+		control_dot(DOT_CURSOR_SHOW);
 		alarm(1);
 	}
 }
@@ -94,9 +95,10 @@ void initiate_mode(int mode) {
         case 3:
                 /*
                  * mode 4 - draw board
-                 * set blinking dot on dot matrix
                  */
+		control_dot(DOT_CURSOR_SHOW);
 		alarm_flag = FLAG_MODE_4;
+		alarm(1);
                 break;
         case 4:
                 /*
@@ -225,7 +227,6 @@ MODE_FUNCTION(4, {
 	switch (input) {
 	case SW_1:
 	case SW_2:
-	case SW_3:
 	case SW_4:
 	case SW_5:
 	case SW_6:
@@ -236,6 +237,15 @@ MODE_FUNCTION(4, {
 			if ((input >> i) & 1) {
 				control_dot(i + 1);
 			}
+		}
+		break;
+	case SW_3:
+		alarm_flag ^= FLAG_MODE_4;
+		if (alarm_flag) {
+			control_dot(DOT_CURSOR_SHOW);
+			alarm(1);
+		} else {
+			control_dot(DOT_CURSOR_HIDE);
 		}
 		break;
 	default:

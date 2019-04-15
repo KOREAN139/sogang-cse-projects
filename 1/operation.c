@@ -15,6 +15,8 @@ static unsigned char lcd_array[8];
 static int lcd_idx;
 /* variables for dot matrix */
 static unsigned char dot_array[10];
+static unsigned char select_array[10];
+static unsigned char cursor_array[10];
 static int dx[] = {1, -1};		/* for cursor move */
 static int dy[] = {1, -1};		/* for cursor move */
 static int cx, cy;			/* for trace cursor */
@@ -160,40 +162,54 @@ void control_dot(int op) {
 
 	switch (op) {
 	case DOT_CURSOR_UP:
+		cursor_array[cy] &= ~(1 << (6 - cx));
 		cy = (cy + dy[1] + MAT_HEIGHT) % MAT_HEIGHT;
 		break;
 	case DOT_CURSOR_DOWN:
+		cursor_array[cy] &= ~(1 << (6 - cx));
 		cy = (cy + dy[0] + MAT_HEIGHT) % MAT_HEIGHT;
 		break;
 	case DOT_CURSOR_LEFT:
+		cursor_array[cy] &= ~(1 << (6 - cx));
 		cx = (cx + dx[1] + MAT_WIDTH) % MAT_WIDTH;
 		break;
 	case DOT_CURSOR_RIGHT:
+		cursor_array[cy] &= ~(1 << (6 - cx));
 		cx = (cx + dx[0] + MAT_WIDTH) % MAT_WIDTH;
 		break;
 	case DOT_CURSOR_SHOW:
-		// TODO: implement this
+		cursor_array[cy] ^= 1 << (6 - cx);
+		break;
+	case DOT_CURSOR_HIDE:
+		cursor_array[cy] = 0;
 		break;
 	case DOT_RESET:
 		dot_input_mode = 0;
 		cx = cy = 0;
 	case DOT_CLEAR:
 		memset(dot_array, 0, sizeof(dot_array));
+		memset(cursor_array, 0, sizeof(cursor_array));
+		memset(select_array, 0, sizeof(select_array));
 		break;
 	case DOT_SELECT:
-		dot_array[cy] ^= 1 << (6 - cx);
+		select_array[cy] ^= 1 << (6 - cx);
 		break;
 	case DOT_REVERSE:
 		for (i = 0; i < 10; i++) {
-			dot_array[i] ^= 0xff;
+			select_array[i] ^= 0xff;
 		}
 		break;
 	case DOT_PRINT_INPUT_MODE:
-		memcpy(dot_array, dot_char[dot_input_mode], sizeof(dot_array));
+		memcpy(select_array, dot_char[dot_input_mode],
+			sizeof(select_array));
 		dot_input_mode ^= 1;
 		break;
 	default:
 		break;
+	}
+
+	for (i = 0; i < 10; i++) {
+		dot_array[i] = select_array[i] ^ cursor_array[i];
 	}
 
 	/* send current state to ouput_process */
