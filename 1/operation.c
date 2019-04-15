@@ -68,7 +68,8 @@ void control_fnd(int op) {
 	case FND_ADD_MINUTE:
 		m = fnd_curr % 100;
 		m = (m + 1) % 60;
-		fnd_curr = fnd_curr / 100 * 100 + m;
+		h = fnd_curr / 100 + !m;
+		fnd_curr = h % 24 * 100 + m;
 		break;
 	case FND_ADD_HOUR:
 		h = fnd_curr / 100;

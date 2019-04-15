@@ -13,7 +13,8 @@
  */
 #define FLAG_BLINK		1
 #define FLAG_MODE_1		2
-#define FLAG_MODE_4		4
+#define FLAG_BOARD_TIME		4
+#define FLAG_MODE_4		8
 
 /*
  * Bit masking for switch input

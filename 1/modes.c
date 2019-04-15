@@ -11,7 +11,7 @@
 	__VA_ARGS__
 
 /* flags for alarm handler */
-static int blink_sec;
+static int sec;
 static int alarm_flag;
 /* variables for mode 3 */
 static char text_pad[9][4] = {
@@ -31,15 +31,24 @@ static mode_func_ptr modes[5] = {
 void periodic_control(int signo) {
 	if (alarm_flag & FLAG_MODE_1) {
 		if (alarm_flag & FLAG_BLINK) {
-			control_led(LED_SET, 1 << (5 - blink_sec));
-			blink_sec ^= 1;
-		} else {
+			control_led(LED_SET, 1 << (5 - !sec));
+			sec ^= 1;
+			alarm(1);
+		} else if (alarm_flag & FLAG_BOARD_TIME) {
 			control_fnd(FND_SET_BOARD_TIME);
+			alarm(5);
+		} else {
+			sec += 5;
+			if (sec == 60) {
+				control_fnd(FND_ADD_MINUTE);
+				sec = 0;
+			}
+			alarm(5);
 		}
 	}
 	if (alarm_flag & FLAG_MODE_4) {
+		alarm(1);
 	}
-	alarm(1);
 }
 
 /**
@@ -47,7 +56,7 @@ void periodic_control(int signo) {
  */
 void initialize_board() {
 	alarm(0);
-	alarm_flag = blink_sec = 0;
+	alarm_flag = sec = 0;
 	prev = -1;
 	numeric = cnt = 0;
 	control_fnd(FND_RESET);
@@ -67,7 +76,8 @@ void initiate_mode(int mode) {
                  */
 		control_fnd(FND_SET_BOARD_TIME);
 		control_led(LED_SET, 1 << 7);
-		alarm_flag |= FLAG_MODE_1;
+		alarm_flag = FLAG_MODE_1 | FLAG_BOARD_TIME;
+		alarm(5);
                 break;
         case 1:
                 /*
@@ -86,7 +96,7 @@ void initiate_mode(int mode) {
                  * mode 4 - draw board
                  * set blinking dot on dot matrix
                  */
-		alarm_flag |= FLAG_MODE_4;
+		alarm_flag = FLAG_MODE_4;
                 break;
         case 4:
                 /*
@@ -105,18 +115,18 @@ void run_mode(int mode, int input) {
 MODE_FUNCTION(1, {
 	switch (input) {
 	case SW_1:
-		if (alarm_flag & FLAG_BLINK) {
-			control_led(LED_SET, 1 << 7);
-			alarm_flag -= FLAG_BLINK;
-		} else {
-			control_led(LED_SET, 1 << 5);
-			blink_sec = 1;
-			alarm_flag += FLAG_BLINK;
+		if (alarm_flag & FLAG_BOARD_TIME) {
+			alarm_flag ^= FLAG_BOARD_TIME;
 		}
+		alarm_flag ^= FLAG_BLINK;
+		control_led(LED_SET, alarm_flag & FLAG_BLINK ? 1 << 5 : 1 << 7);
+		sec = 0;
 		alarm(1);
 		break;
 	case SW_2:
-		control_fnd(FND_SET_BOARD_TIME);
+		if (alarm_flag & FLAG_BLINK) {
+			control_fnd(FND_SET_BOARD_TIME);
+		}
 		break;
 	case SW_3:
 		if (alarm_flag & FLAG_BLINK) {
