@@ -42,6 +42,9 @@
 #define DOT_CURSOR_DOWN		8
 #define DOT_REVERSE		9
 #define DOT_CURSOR_HIDE		10
+#define DOT_PRINT_1		11
+#define DOT_PRINT_2		12
+#define DOT_PRINT_3		13
 
 /*
  * Options for led operation

@@ -19,6 +19,8 @@ static char text_pad[9][4] = {
 	"MNO", "PRS", "TUV", "WXY"
 };
 static int prev, cnt, numeric;
+/* variables for mode 5 */
+static int ingame, ans;
 
 /* set function pointer array w/ mode functions */
 static mode_func_ptr modes[5] = {
@@ -29,6 +31,9 @@ static mode_func_ptr modes[5] = {
  * periodic_control - alarm signal handler for periodic output
  */
 void periodic_control(int signo) {
+	int r;
+	unsigned char ans_led = 0;
+
 	if (alarm_flag & FLAG_MODE_1) {
 		if (alarm_flag & FLAG_BLINK) {
 			control_led(LED_SET, 1 << (5 - !sec));
@@ -46,9 +51,28 @@ void periodic_control(int signo) {
 			alarm(5);
 		}
 	}
+
 	if (alarm_flag & FLAG_MODE_4) {
 		control_dot(DOT_CURSOR_SHOW);
 		alarm(1);
+	}
+
+	if (alarm_flag & FLAG_MODE_5) {
+		if (sec) {
+			sec -= 1;
+			control_dot(DOT_PRINT_1 + sec);
+			alarm(1);
+		} else {
+			control_dot(DOT_RESET);
+			control_dot(DOT_REVERSE);
+			srand(time(NULL));
+			do {
+				r = rand() % 8;
+				ans |= 1 << r;
+				ans_led |= 1 << (7 - r);
+			} while (r % 2);
+			control_led(LED_SET, ans_led);
+		}
 	}
 }
 
@@ -60,6 +84,7 @@ void initialize_board() {
 	alarm_flag = sec = 0;
 	prev = -1;
 	numeric = cnt = 0;
+	ingame = ans = 0;
 	control_fnd(FND_RESET);
 	control_lcd(LCD_RESET, 0);
 	control_dot(DOT_RESET);
@@ -254,8 +279,42 @@ MODE_FUNCTION(4, {
 })
 
 MODE_FUNCTION(5, {
+	if (ingame) {
+		control_fnd(FND_INCREASE);
+	}
+
 	switch (input) {
+	case SW_5:
+		if (!ingame) {
+			ingame = 1;
+			control_dot(DOT_PRINT_3);
+			sec = 2;
+			alarm_flag |= FLAG_MODE_5;
+			alarm(1);
+		}
+		break;
+	case SW_9:
+		ans = 0;
+		ingame = 0;
+		control_led(LED_RESET, 0);
+		control_dot(DOT_RESET);
+		control_lcd(LCD_RESET, 0);
+		control_fnd(FND_RESET);
+		break;
 	default:
 		break;
+	}
+
+	if (ingame && input == ans) {
+		control_dot(DOT_REVERSE);
+		control_lcd(LCD_ADD_CHAR, 'C');
+		control_lcd(LCD_ADD_CHAR, 'O');
+		control_lcd(LCD_ADD_CHAR, 'N');
+		control_lcd(LCD_ADD_CHAR, 'G');
+		control_lcd(LCD_ADD_CHAR, 'R');
+		control_lcd(LCD_ADD_CHAR, 'A');
+		control_lcd(LCD_ADD_CHAR, 'T');
+		control_lcd(LCD_ADD_CHAR, 'S');
+		control_lcd(LCD_ADD_CHAR, '!');
 	}
 })

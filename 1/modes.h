@@ -5,7 +5,9 @@
 #ifndef _MODES_H_
 #define _MODES_H_
 
+#include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 /*
@@ -15,6 +17,7 @@
 #define FLAG_MODE_1		2
 #define FLAG_BOARD_TIME		4
 #define FLAG_MODE_4		8
+#define FLAG_MODE_5		16
 
 /*
  * Bit masking for switch input
