@@ -30,7 +30,7 @@ int enqueue_message(int qid, long mtype, int dtype, char *msg) {
 		len = 4;
 		break;
 	case DATA_LCD:
-		len = 8;
+		len = 32;
 		break;
 	case DATA_DOT:
 		len = 10;

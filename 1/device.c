@@ -56,7 +56,7 @@ void write_lcd(char *input) {
 #define LINE_BUFF	16
 	unsigned char string[MAX_BUFF];
 	memset(string, ' ', sizeof(string));
-	memcpy(string, input, 8);
+	memcpy(string, input, 32);
 	write(driver[1], string, MAX_BUFF);
 #undef MAX_BUFF
 #undef LINE_BUFF

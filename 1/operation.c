@@ -11,7 +11,7 @@ static int fnd_curr;			/* for mode 2 */
 static int fnd_base;			/* for mode 2 */
 static int b;				/* for mode 2 */
 /* variables for lcd */
-static unsigned char lcd_array[8];
+static unsigned char lcd_array[32];
 static int lcd_idx;
 /* variables for dot matrix */
 static unsigned char dot_array[10];
@@ -113,7 +113,7 @@ void control_fnd(int op) {
 }
 
 void control_lcd(int op, char ch) {
-#define MAX_WIDTH	8
+#define MAX_WIDTH	32
 	/* variable for loop counter */
 	int i;
 	/* variable for message queue */
