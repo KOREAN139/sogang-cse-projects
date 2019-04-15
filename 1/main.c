@@ -61,7 +61,6 @@ int main(int argc, char *argv[]) {
         do {
                 msg_t message;
                 if (receive_message(msgqid, (long)INPUT, &message)) {
-                        printf("(M) Failed to receive message\n");
 			continue;
                 }
 

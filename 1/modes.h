@@ -60,39 +60,34 @@ void initiate_mode(int mode);
  */
 void run_mode(int mode, int input);
 /**
- * mode1 - do task for mode 1 with input
+ * mode1 - do task for mode 1 (clock) with given input
  * @input: switch input bit-masked data,
  *	 if i-th switch has pressed, i-th bit masked as 1
  */
 DECLARE_MODE_FUNCTION(1);
 /**
- * mode2 - do task for mode 2 with input
+ * mode2 - do task for mode 2 (counter) with given input
  * @input: switch input bit-masked data,
  *	 if i-th switch has pressed, i-th bit masked as 1
  */
 DECLARE_MODE_FUNCTION(2);
 /**
- * mode3 - do task for mode 3 with input
+ * mode3 - do task for mode 3 (text editor) with given input
  * @input: switch input bit-masked data,
  *	 if i-th switch has pressed, i-th bit masked as 1
  */
 DECLARE_MODE_FUNCTION(3);
 /**
- * mode4 - do task for mode 4 with input
+ * mode4 - do task for mode 4 (draw board) with given input
  * @input: switch input bit-masked data,
  *	 if i-th switch has pressed, i-th bit masked as 1
  */
 DECLARE_MODE_FUNCTION(4);
 /**
- * mode5 - do task for mode 5 with input
+ * mode5 - do task for mode 5 (game) with given input
  * @input: switch input bit-masked data,
  *	 if i-th switch has pressed, i-th bit masked as 1
  */
 DECLARE_MODE_FUNCTION(5);
-/**
- * send_result - send result of task to output process
- * @type: type of device (use defined constant in message.h)
- */
-void send_result(int type);
 
 #endif

@@ -30,6 +30,9 @@ static unsigned char dot_char[][10] = {
 /* variable for led */
 static unsigned char led_mask[1];
 
+/**
+ * update_base() - update base info w/ fnd_base
+ */
 static void update_base() {
 	if (fnd_base == 2) {
 		b = 10;
@@ -40,10 +43,16 @@ static void update_base() {
 	}
 }
 
+/**
+ * get_fnd_base - returns current value of fnd_base
+ */
 int get_fnd_base() {
 	return fnd_base;
 }
 
+/**
+ * control_fnd - control input for fnd on board
+ */
 void control_fnd(int op) {
 	/* variables for digit->string convert loop */
 	int i, cur;
@@ -55,6 +64,10 @@ void control_fnd(int op) {
 	int qid;
 
 	switch (op) {
+	/* 
+	 * do modular work after operation w/ fnd_curr to get rid of
+	 * useless part of number
+	 */
 	case FND_INCREASE:
 		fnd_curr = (fnd_curr + 1) % (b * b * b * b);
 		break;
@@ -114,6 +127,9 @@ void control_fnd(int op) {
 	}
 }
 
+/**
+ * control_lcd - control input for lcd on board
+ */
 void control_lcd(int op, char ch) {
 #define MAX_WIDTH	32
 	/* variable for loop counter */
@@ -152,6 +168,9 @@ void control_lcd(int op, char ch) {
 #undef MAX_WIDTH
 }
 
+/**
+ * control_dot - control input for dot matrix on board
+ */
 void control_dot(int op) {
 #define MAT_WIDTH	7
 #define MAT_HEIGHT	10
@@ -163,6 +182,7 @@ void control_dot(int op) {
 	int qid;
 
 	switch (op) {
+	/* when cursor moves, fill previous spot as 0 */
 	case DOT_CURSOR_UP:
 		cursor_array[cy] &= ~(1 << (6 - cx));
 		cy = (cy + dy[1] + MAT_HEIGHT) % MAT_HEIGHT;
@@ -180,11 +200,14 @@ void control_dot(int op) {
 		cx = (cx + dx[0] + MAT_WIDTH) % MAT_WIDTH;
 		break;
 	case DOT_CURSOR_SHOW:
+		/* XOR for blinking */
 		cursor_array[cy] ^= 1 << (6 - cx);
 		break;
 	case DOT_CURSOR_HIDE:
+		/* hide cursor */
 		cursor_array[cy] = 0;
 		break;
+	/* DOT_REST does same work as DOT_CLEAR, but it resets cursor too */
 	case DOT_RESET:
 		dot_input_mode = 0;
 		cx = cy = 0;
@@ -216,6 +239,7 @@ void control_dot(int op) {
 		break;
 	}
 
+	/* XOR cursor array and select array to get logical dot matrix state */
 	for (i = 0; i < 10; i++) {
 		dot_array[i] = select_array[i] ^ cursor_array[i];
 	}
@@ -232,6 +256,9 @@ void control_dot(int op) {
 #undef MAT_HEIGHT
 }
 
+/**
+ * control_led - control input for led on board
+ */
 void control_led(int op, unsigned char mask) {
 	/* variable for message queue */
 	int qid;

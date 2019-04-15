@@ -43,6 +43,7 @@ typedef struct msg_t {
 
 /**
  * get_message_qid - get message queue id
+ * returns message queue id which this program uses
  */
 int get_message_qid();
 /**
@@ -51,6 +52,7 @@ int get_message_qid();
  * @mtype: type for message
  * @dtype: type for data which current message contains
  * @msg: data which message will contain
+ * return 0 if enqueue was successful, -1 otherwise
  */
 int enqueue_message(int qid, long mtype, int dtype, char *msg);
 /**
@@ -58,6 +60,7 @@ int enqueue_message(int qid, long mtype, int dtype, char *msg);
  * @qid: queue id of message queue
  * @mtype: type for message
  * @msg: pointer to store receive message
+ * return 0 if enqueue was successful, -1 otherwise
  */
 int receive_message(int qid, long mtype, msg_t *msg);
 

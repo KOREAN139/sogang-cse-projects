@@ -47,10 +47,16 @@ int open_drivers() {
         return error_flag;
 }
 
+/**
+ * write_fnd - write input on fnd
+ */
 void write_fnd(char *input) {
 	write(driver[0], input, 4);
 }
 
+/**
+ * write_lcd - write input on lcd
+ */
 void write_lcd(char *input) {
 #define MAX_BUFF	32
 #define LINE_BUFF	16
@@ -62,10 +68,16 @@ void write_lcd(char *input) {
 #undef LINE_BUFF
 }
 
+/**
+ * write_dot - write input on dot matrix
+ */
 void write_dot(char *input) {
 	write(driver[2], input, 10);
 }
 
+/**
+ * write_led - write input on led
+ */
 void write_led(char input) {
 	*led_addr = input;
 }

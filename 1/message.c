@@ -4,6 +4,9 @@
 
 #include "message.h"
 
+/**
+ * get_message_qid - get message queue id
+ */
 int get_message_qid() {
         key_t key;
         int qid;
@@ -14,6 +17,9 @@ int get_message_qid() {
         return qid;
 }
 
+/**
+ * enqueue_message - enqueue message with given data
+ */
 int enqueue_message(int qid, long mtype, int dtype, char *msg) {
 	/* variable for loop counter */
 	int i;
@@ -51,6 +57,7 @@ int enqueue_message(int qid, long mtype, int dtype, char *msg) {
 	for (i = 0; i < len; i++) {
 		message.msg[i] = msg[i];
 	}
+
         if (msgsnd(qid, &message, sizeof(msg_t)-sizeof(long), 0) == -1) {
                 perror("Error occurred msgsnd()");
                 return -1;
@@ -58,6 +65,9 @@ int enqueue_message(int qid, long mtype, int dtype, char *msg) {
 	return 0;
 };
 
+/**
+ * receive_message - receive message with given mtype
+ */
 int receive_message(int qid, long mtype, msg_t *msg) {
         if (msgrcv(qid, msg, sizeof(msg_t)-sizeof(long), mtype, 0) == -1) {
                 perror("Error occurred msgrcv()");
