@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<!--  This site was created in Webflow. http://www.webflow.com  -->
+<!--  Last Published: Mon Dec 25 2017 21:13:35 GMT+0000 (UTC)  -->
+<html data-wf-page="5a40c1128192d400018d106a" data-wf-site="5a40c1128192d400018d1069">
+{% load staticfiles %}
+<head>
+  <meta charset="utf-8">
+  <title>Pixelcoin - Home</title>
+  <meta content="Pixelcoin" name="description">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="Webflow" name="generator">
+  <link href="{% static '/market/webflow.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static '/market/normalize.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static '/market/style.css' %}" rel="stylesheet" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js" type="text/javascript"></script>
+  <script type="text/javascript">WebFont.load({  google: {    families: ["Bitter:400,700,400italic"]  }});</script>
+  <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
+  <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
+  <link href="{% static '/user/Favicon.png' %}" rel="shortcut icon" type="image/x-icon">
+  <link href="{% static '/user/Webclip.png' %}" rel="apple-touch-icon">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <style type="text/css">
+        .hover {
+            position: absolute;
+            display: none;
+            font-size: x-small;
+            font-family: "Apple SD Gothic Neo";
+            background: white;
+            border: 1px solid crimson;
+        }
+
+        .divpixelstatus {
+            width: 100%;
+            position: relative;
+        }
+
+        .divpixelstatus:after {
+            content: "";
+            display: block;
+            padding-bottom: 100%;
+
+        }
+
+        .pixelstat {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+    </style>
+    <script>
+        var sTitle = "";
+        var currX, currY, cnt = 0;
+        var array = new Array (10000);
+        var x1, x2, y1, y2;
+        var price = 100000;
+
+        $(document).mousemove(function(e){
+            $("#titles").css({left: e.pageX+8, top: e.pageY});
+            currX = e.pageX, currY = e.pageY;
+        });
+        function e(o){
+            sTitle = o.id;
+            document.getElementById('titles').innerHTML=sTitle;
+            document.getElementById('titles').style.display='block';
+        }
+        function d(){
+            sTitle = "";
+            document.getElementById('titles').innerText=sTitle;
+            document.getElementById('titles').style.display='none';
+        }
+        function appendNode(v, id) {
+            n = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+            for (var p in v)
+                n.setAttributeNS(null, p, v[p]);
+            n.setAttributeNS(null, 'id', id);
+            n.setAttributeNS(null, 'onmouseover', 'e(this)');
+            document.getElementById('pxstat').appendChild(n);
+        }
+        function purchase(){
+          window.location='/market/pixel';
+        }
+        function draw(){
+
+            {% for px in pixel %}
+            appendNode({x: '{{ px.x }}', y: '{{ px.y }}', width: '{{ px.width }}', height: '{{ px.height }}', fill: '{{ px.color }}'}, '{{ px.Owner }}');
+            {% endfor %}
+
+
+
+        }
+    </script>
+</head>
+<body class="body">
+  <div data-collapse="medium" data-animation="default" data-duration="400" class="navbar w-nav">
+    <div class="container w-container"><a href="/market/main" class="logo w-nav-brand"><img src="{% static '/user/Logo.png' %}"></a>
+      <nav role="navigation" class="nav-menu w-nav-menu"><a href="/market/main" class="navlinkhome w-nav-link">Home</a><a href="/user/about" class="navlinkabout w-nav-link">About</a><a href="/user/login" class="navlinklogin w-nav-link">Log in</a><a href="/market/mypage" class="navlinkmypage w-nav-link">My page</a></nav>
+      <div class="menu-button w-nav-button">
+        <div class="icon w-icon-nav-menu"></div>
+      </div>
+    </div>
+  </div>
+  <div class="rowmain w-row">
+    <div class="colpixel w-col w-col-7">
+      <div class="divpixel">
+        <div class="divpixeltitle">
+          <div class="text-block">Pixel Status</div>
+        </div>
+        <div class="divpixelstatus" onmouseout="d()">
+          <svg class="pixelstat" id="pxstat" onload="draw()">
+           <rect onmouseover="e(this)" onclick="purchase()" width="100%" height="100%" fill="white" id="NOT PURCHASED YET!" class="BLNK"/>
+        <!--
+        <rect onmouseover="e(this)" x="28%" width="40%" height="100%" fill="yellow" id="BYE!"/>
+        -->
+          </svg>
+      </div>
+      </div>
+    </div>
+    <div class="colprice w-col w-col-5">
+      <div id="DivBTC" class="div-block-coin">
+        <div id="DivBTCMain" class="div-block-main">
+          <div class="div-block-57"><a href="/market/btc/"><img src="{% static '/images/BTC.png' %}"></a></div>
+          <div class="div-block-58">
+            <div class="text-block-29">Bitcoin</div>
+          </div>
+        </div>
+        <div id="DivBTCPrice" class="div-block-price">
+          <div id="DivBTCPrice" class="div-block-59">
+            <div class="text-block-28">{{ price.BTC }} KRW</div>
+          </div>
+          <div id="DivBTCRate" class="div-block-60">
+            <div class="text-block-30">({{ price.BTCp }}%)</div>
+          </div>
+        </div>
+      </div>
+      <div id="DivETH" class="div-block-coin">
+        <div id="DivBTCMain" class="div-block-main">
+          <div class="div-block-57"><a href="/market/eth/"><img src="{% static '/images/ETH.png' %}"></a></div>
+          <div class="div-block-58">
+            <div class="text-block-29">Ethereum</div>
+          </div>
+        </div>
+        <div id="DivBTCPrice" class="div-block-price">
+          <div id="DivETHPrice" class="div-block-59">
+            <div class="text-block-28">{{ price.ETH }} KRW</div>
+          </div>
+          <div id="DivETHRate" class="div-block-60">
+            <div class="text-block-30">({{ price.ETHp }}%)</div>
+          </div>
+        </div>
+      </div>
+      <div id="DivBCH" class="div-block-coin">
+        <div id="DivBTCMain" class="div-block-main">
+          <div class="div-block-57"><a href="/market/bch/"><img src="{% static '/images/BCH.png' %}"></a></div>
+          <div class="div-block-58">
+            <div class="text-block-29">Bitcoin Cash</div>
+          </div>
+        </div>
+        <div id="DivBTCPrice" class="div-block-price">
+          <div id="DivBCHPrice" class="div-block-59">
+            <div class="text-block-28">{{ price.BCH }} KRW</div>
+          </div>
+          <div id="DivBCHRate" class="div-block-60">
+            <div class="text-block-30">({{ price.BCHp }}%)</div>
+          </div>
+        </div>
+      </div>
+      <div id="DivXRP" class="div-block-coin">
+        <div id="DivBTCMain" class="div-block-main">
+          <div class="div-block-57"><a href="/market/xrp/"><img src="{% static '/images/XRP.png' %}"></a></div>
+          <div class="div-block-58">
+            <div class="text-block-29">Ripple</div>
+          </div>
+        </div>
+        <div id="DivBTCPrice" class="div-block-price">
+          <div id="DivXRPPrice" class="div-block-59">
+            <div class="text-block-28">{{ price.XRP }} KRW</div>
+          </div>
+          <div id="DivXRPRate" class="div-block-60">
+            <div class="text-block-30">({{ price.XRPp }}%)</div>
+          </div>
+        </div>
+      </div>
+      <div id="DivLTC" class="div-block-coin">
+        <div id="DivBTCMain" class="div-block-main">
+          <div class="div-block-57"><a href="/market/ltc/"><img src="{% static '/images/LTC.png' %}"></a></div>
+          <div class="div-block-58">
+            <div class="text-block-29">Litecoin</div>
+          </div>
+        </div>
+        <div id="DivBTCPrice" class="div-block-price">
+          <div id="DivLTCPrice" class="div-block-59">
+            <div class="text-block-28">{{ price.LTC }} KRW</div>
+          </div>
+          <div id="DivLTCRate" class="div-block-60">
+            <div class="text-block-30">({{ price.LTCp }}%)</div>
+          </div>
+        </div>
+      </div>
+      <div id="DivDASH" class="div-block-coin">
+        <div id="DivBTCMain" class="div-block-main">
+          <div class="div-block-57"><a href="/market/dash/"><img src="{% static '/images/DASH.png' %}"></a></div>
+          <div class="div-block-58">
+            <div class="text-block-29">Dash</div>
+          </div>
+        </div>
+        <div id="DivBTCPrice" class="div-block-price">
+          <div id="DivDASHPrice" class="div-block-59">
+            <div class="text-block-28">{{ price.DASH }} KRW</div>
+          </div>
+          <div id="DivDASHRate" class="div-block-60">
+            <div class="text-block-30">({{ price.DASHp }}%)</div>
+          </div>
+        </div>
+      </div>
+      <div id="DivBTG" class="div-block-coin">
+        <div id="DivBTCMain" class="div-block-main">
+          <div class="div-block-57"><a href="/market/btg/"><img src="{% static '/images/BTG.png' %}"></a></div>
+          <div class="div-block-58">
+            <div class="text-block-29">Bitcoin Gold</div>
+          </div>
+        </div>
+        <div id="DivBTCPrice" class="div-block-price">
+          <div id="DivBTGPrice" class="div-block-59">
+            <div class="text-block-28">{{ price.BTG }} KRW</div>
+          </div>
+          <div id="DivBTGRate" class="div-block-60">
+            <div class="text-block-30">({{ price.BTGp }}%)</div>
+          </div>
+        </div>
+      </div>
+      <div id="DivXMR" class="div-block-coin">
+        <div id="DivBTCMain" class="div-block-main">
+          <div class="div-block-57"><a href="/market/XMR/"><img src="{% static '/images/XMR.png' %}"></a></div>
+          <div class="div-block-58">
+            <div class="text-block-29">Monero</div>
+          </div>
+        </div>
+        <div id="DivBTCPrice" class="div-block-price">
+          <div id="DivXMRPrice" class="div-block-59">
+            <div class="text-block-28">{{ price.XMR }} KRW</div>
+          </div>
+          <div id="DivXMRRate" class="div-block-60">
+            <div class="text-block-30">({{ price.XMRp }}%)</div>
+          </div>
+        </div>
+      </div>
+      <div id="DivEOS" class="div-block-coin">
+        <div id="DivBTCMain" class="div-block-main">
+          <div class="div-block-57"><a href="/market/eos/"><img src="{% static '/images/EOS.png' %}"></a></div>
+          <div class="div-block-58">
+            <div class="text-block-29">EOS</div>
+          </div>
+        </div>
+        <div id="DivBTCPrice" class="div-block-price">
+          <div id="DivEOSPrice" class="div-block-59">
+            <div class="text-block-28">{{ price.EOS }} KRW</div>
+          </div>
+          <div id="DivEOSRate" class="div-block-60">
+            <div class="text-block-30">({{ price.EOSp }}%)</div>
+          </div>
+        </div>
+      </div>
+      <div id="DivQTUM" class="div-block-coin">
+        <div id="DivBTCMain" class="div-block-main">
+          <div class="div-block-57"><a href="/market/qtum/"><img src="{% static '/images/QTUM.png' %}"></a></div>
+          <div class="div-block-58">
+            <div class="text-block-29">Qtum</div>
+          </div>
+        </div>
+        <div id="DivBTCPrice" class="div-block-price">
+          <div id="DivQTUMPrice" class="div-block-59">
+            <div class="text-block-28">{{ price.QTUM }} KRW</div>
+          </div>
+          <div id="DivQTUMRate" class="div-block-60">
+            <div class="text-block-30">({{ price.QTUMp }}%)</div>
+          </div>
+        </div>
+      </div>
+      <div id="DivETC" class="div-block-coin">
+        <div id="DivBTCMain" class="div-block-main">
+          <div class="div-block-57"><a href="/market/etc/"><img src="{% static '/images/ETC.png' %}"></a></div>
+          <div class="div-block-58">
+            <div class="text-block-29">Ethereum<br>Classic</div>
+          </div>
+        </div>
+        <div id="DivBTCPrice" class="div-block-price">
+          <div id="DivETCPrice" class="div-block-59">
+            <div class="text-block-28">{{ price.ETC }} KRW</div>
+          </div>
+          <div id="DivETCRate" class="div-block-60">
+            <div class="text-block-30">({{ price.ETCp }}%)</div>
+          </div>
+        </div>
+      </div>
+      <div id="DivZEC" class="div-block-coin">
+        <div id="DivBTCMain" class="div-block-main">
+          <div class="div-block-57"><a href="/market/zec/"><img src="{% static '/images/ZEC.png' %}"></a></div>
+          <div class="div-block-58">
+            <div class="text-block-29">ZCash</div>
+          </div>
+        </div>
+        <div id="DivBTCPrice" class="div-block-price">
+          <div id="DivZECPrice" class="div-block-59">
+            <div class="text-block-28">{{ price.ZEC }} KRW</div>
+          </div>
+          <div id="DivZECRate" class="div-block-60">
+            <div class="text-block-30">({{ price.ZECp }}%)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js" type="text/javascript"></script>
+  <script src="{% static '/webflow.js' %}" type="text/javascript"></script>
+  <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
+    <div class="hover" id="titles"></div>
+</body>
+</html>
